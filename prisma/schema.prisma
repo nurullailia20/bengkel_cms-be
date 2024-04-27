@@ -1,0 +1,203 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum role {
+  admin
+  user
+}
+
+model user {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  password      String
+  address       String
+  role          role
+  // baby_id       baby[]
+}
+
+
+model baby {
+  id                    String          @id @default(cuid())
+  name                  String
+  gender                String
+  birthdate             DateTime
+  parent_name           String
+  address               String
+  phone_number          String
+  baby_condition_id     baby_condition[]
+}
+
+model baby_condition {
+  id                String    @id @default(cuid())
+  baby              baby      @relation(fields: [baby_id], references: [id])
+  baby_id           String
+  month             Int
+  height            Float
+  weight            Float
+  created_at        DateTime  @default(now())
+  updated_at        DateTime  @updatedAt
+}
+
+model BB_on_U_0_60_months_boy {
+  age_in_month    Int @id
+  sd_minus_3    Float 
+  sd_minus_2    Float
+  sd_minus_1    Float
+  median        Float
+  sd_plus_1     Float
+  sd_plus_2     Float
+  sd_plus_3     Float
+}
+model PB_on_U_0_24_months_boy {
+  age_in_month    Int @id
+  sd_minus_3    Float
+  sd_minus_2    Float
+  sd_minus_1    Float
+  median        Float
+  sd_plus_1     Float
+  sd_plus_2     Float
+  sd_plus_3     Float
+}
+model TB_on_U_25_60_months_boy {
+  age_in_month    Int @id
+  sd_minus_3    Float
+  sd_minus_2    Float
+  sd_minus_1    Float
+  median        Float
+  sd_plus_1     Float
+  sd_plus_2     Float
+  sd_plus_3     Float
+}
+
+model BB_on_PB_0_24_months_boy {
+   
+  body_length    Float @id
+  sd_minus_3    Float
+  sd_minus_2    Float
+  sd_minus_1    Float
+  median        Float
+  sd_plus_1     Float
+  sd_plus_2     Float
+  sd_plus_3     Float
+}
+model BB_on_PB_25_60_months_boy {
+   
+  body_length    Float @id
+  sd_minus_3    Float
+  sd_minus_2    Float
+  sd_minus_1    Float
+  median        Float
+  sd_plus_1     Float
+  sd_plus_2     Float
+  sd_plus_3     Float
+}
+model IMT_on_PB_0_24_months_boy {
+   
+  age_in_month    Int @id
+  sd_minus_3    Float
+  sd_minus_2    Float
+  sd_minus_1    Float
+  median        Float
+  sd_plus_1     Float
+  sd_plus_2     Float
+  sd_plus_3     Float
+}
+model IMT_on_PB_25_60_months_boy {
+   
+  age_in_month    Int @id
+  sd_minus_3    Float
+  sd_minus_2    Float
+  sd_minus_1    Float
+  median        Float
+  sd_plus_1     Float
+  sd_plus_2     Float
+  sd_plus_3     Float
+}
+
+// girl
+
+model BB_on_U_0_60_months_girl {
+   
+  age_in_month    Int @id
+  sd_minus_3    Float
+  sd_minus_2    Float
+  sd_minus_1    Float
+  median        Float
+  sd_plus_1     Float
+  sd_plus_2     Float
+  sd_plus_3     Float
+}
+model PB_on_U_0_24_months_girl {
+   
+  age_in_month    Int @id
+  sd_minus_3    Float
+  sd_minus_2    Float
+  sd_minus_1    Float
+  median        Float
+  sd_plus_1     Float
+  sd_plus_2     Float
+  sd_plus_3     Float
+}
+model TB_on_U_25_60_months_girl {
+   
+  age_in_month    Int @id
+  sd_minus_3    Float
+  sd_minus_2    Float
+  sd_minus_1    Float
+  median        Float
+  sd_plus_1     Float
+  sd_plus_2     Float
+  sd_plus_3     Float
+}
+
+model BB_on_PB_0_24_months_girl {
+   
+  body_length    Float @id
+  sd_minus_3    Float
+  sd_minus_2    Float
+  sd_minus_1    Float
+  median        Float
+  sd_plus_1     Float
+  sd_plus_2     Float
+  sd_plus_3     Float
+}
+model BB_on_PB_25_60_months_girl {
+   
+  body_length    Float @id
+  sd_minus_3    Float
+  sd_minus_2    Float
+  sd_minus_1    Float
+  median        Float
+  sd_plus_1     Float
+  sd_plus_2     Float
+  sd_plus_3     Float
+}
+model IMT_on_PB_0_24_months_girl {
+   
+  age_in_month    Int @id
+  sd_minus_3    Float
+  sd_minus_2    Float
+  sd_minus_1    Float
+  median        Float
+  sd_plus_1     Float
+  sd_plus_2     Float
+  sd_plus_3     Float
+}
+model IMT_on_PB_25_60_months_girl {
+   
+  age_in_month    Int @id
+  sd_minus_3    Float
+  sd_minus_2    Float
+  sd_minus_1    Float
+  median        Float
+  sd_plus_1     Float
+  sd_plus_2     Float
+  sd_plus_3     Float
+}
