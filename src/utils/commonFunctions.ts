@@ -10,3 +10,5 @@ export const calculateAgeInMonths = (birthDate: string | Date | undefined) => {
 export const dateFormatter = (date: any, format: string = 'DD MMM YYYY') => {
   return moment(date).format(format)
 }
+
+export const getMonth = (date: Date | string) => moment(date).month()

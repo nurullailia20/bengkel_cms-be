@@ -46,10 +46,10 @@ export const getBaby = async (req: Request, res: Response) => {
       birthdate: dateFormatter(response.birthdate),
       age: calculateAgeInMonths(response.birthdate)
     }))
-    logger.info('Success add baby data')
+    logger.info('Success get baby data')
     return res.status(200).send({ status: true, statusCode: 200, data: result })
   } catch (error) {
-    logger.error('Err = baby-create', error)
+    logger.error('Err = baby-get', error)
     return res.status(422).send({ status: false, statuseCode: 422, message: error })
   }
 }
@@ -130,7 +130,8 @@ export const getBabyDetail = async (req: Request, res: Response) => {
         parent_name: true,
         phone_number: true,
         address: true,
-        birthdate: true
+        birthdate: true,
+        baby_condition: true
       }
     })
     const result = {
@@ -141,7 +142,7 @@ export const getBabyDetail = async (req: Request, res: Response) => {
     logger.info('Success get detail baby')
     return res.status(200).send({ status: true, statusCode: 200, data: result })
   } catch (error) {
-    logger.error('ERR: detail baby = ', error)
+    logger.error('ERR: detail-baby = ', error)
     return res.status(422).send({ status: false, statuseCode: 422, message: error })
   }
 }

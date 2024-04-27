@@ -31,7 +31,7 @@ model baby {
   parent_name           String
   address               String
   phone_number          String
-  baby_condition_id     baby_condition[]
+  baby_condition     baby_condition[]
 }
 
 model baby_condition {
