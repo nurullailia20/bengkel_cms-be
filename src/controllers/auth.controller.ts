@@ -29,6 +29,7 @@ export const userRegistration = async (req: Request, res: Response) => {
         role: value.role
       }
     })
+    logger.info('User created')
     return res.status(201).json({
       status: true,
       statusCode: 201,
@@ -75,7 +76,9 @@ export const createUserSession = async (req: Request, res: Response) => {
 
     const refreshToken = signJWT({ ...user }, { expiresIn: '1y' })
 
-    return res.status(200).send({ status: true, statusCode: 200, message: 'Login success', data: { accessToken, refreshToken } })
+    return res
+      .status(200)
+      .send({ status: true, statusCode: 200, message: 'Login success', data: { accessToken, refreshToken } })
   } catch (error: any) {
     logger.info('ERR: user - registration = ', error.message)
     return res.status(422).send({

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import prisma from '../../lib/prisma'
 import { logger } from '../utils/logger'
+import { dateFormatter, getMonth } from '../utils/commonFunctions'
 
 export const createBabyCondition = async (req: Request, res: Response) => {
   const { month, weight, height } = req.body
@@ -52,8 +53,16 @@ export const getBabyConditions = async (req: Request, res: Response) => {
         baby_id: id
       }
     })
+
+    const result = responses.map((response) => ({
+      ...response,
+      month: getMonth(response.created_at),
+      created_at: dateFormatter(response.created_at),
+      updated_at: dateFormatter(response.updated_at)
+    }))
+
     logger.info('Get baby conditions successfully')
-    return res.status(200).send({ status: true, statusCode: 200, data: responses })
+    return res.status(200).send({ status: true, statusCode: 200, data: result })
   } catch (error) {
     logger.error('Err = baby-read', error)
     return res.status(422).send({ status: false, statuseCode: 422, message: error })
