@@ -28,3 +28,5 @@ routes(app)
 app.listen(port, () => {
   logger.info(`listening on http://localhost:${port}`)
 })
+
+export default app
