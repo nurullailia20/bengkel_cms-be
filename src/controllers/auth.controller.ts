@@ -49,7 +49,7 @@ export const createUserSession = async (req: Request, res: Response) => {
   const { error, value } = createSessionValidation(req.body)
 
   if (error) {
-    logger.info('ERR: user - registration = ', error.details[0].message)
+    logger.info('ERR: user - login = ', error.details[0].message)
     return res.status(422).send({
       status: false,
       statusCode: 422,
@@ -127,6 +127,25 @@ export const refreshSession = async (req: Request, res: Response) => {
       status: false,
       statusCode: 422,
       message: error.message
+    })
+  }
+}
+
+export const getUsers = async (req: Request, res: Response) => {
+  try {
+    const users = await prisma.user.findMany()
+    return res.status(200).json({
+      status: true,
+      statusCode: 200,
+      message: 'Users fetched successfully',
+      data: users
+    })
+  } catch (error: any) {
+    logger.error('Error fetching users:', error)
+    return res.status(500).json({
+      status: false,
+      statusCode: 500,
+      message: 'Internal server error'
     })
   }
 }

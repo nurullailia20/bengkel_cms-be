@@ -1,11 +1,9 @@
 import { Router } from 'express'
-import { createBabyCondition, getBabyConditions } from '../controllers/condition.controller'
-// import { createBaby, deleteBaby, getBaby, getBabyDetail, updateBaby } from '../controllers/baby.controller'
+import { DeleteBabyCondition, createBabyCondition, getBabyConditions } from '../controllers/condition.controller'
+import { requireBaby } from '../middleware/baby'
 
 export const BabyConditionRouter: Router = Router()
 
-BabyConditionRouter.get('/:id', getBabyConditions)
-// BabyRouter.get('/:id', getBabyDetail)
-BabyConditionRouter.post('/:id', createBabyCondition)
-// BabyRouter.delete('/:id', deleteBaby)
-// BabyRouter.put('/:id', updateBaby)
+BabyConditionRouter.get('/:id', requireBaby, getBabyConditions)
+BabyConditionRouter.post('/:id', requireBaby, createBabyCondition)
+BabyConditionRouter.delete('/:id', requireBaby, DeleteBabyCondition)

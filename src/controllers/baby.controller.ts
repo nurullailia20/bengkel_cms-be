@@ -33,6 +33,7 @@ export const getBaby = async (req: Request, res: Response) => {
   try {
     const responses = await prisma.baby.findMany({
       select: {
+        id: true,
         name: true,
         gender: true,
         parent_name: true,
@@ -44,7 +45,8 @@ export const getBaby = async (req: Request, res: Response) => {
     const result = responses.map((response) => ({
       ...response,
       birthdate: dateFormatter(response.birthdate),
-      age: calculateAgeInMonths(response.birthdate)
+      age: calculateAgeInMonths(response.birthdate),
+      gender: response.gender === 'male' ? 'Laki-Laki' : 'Perempuan'
     }))
     logger.info('Success get baby data')
     return res.status(200).send({ status: true, statusCode: 200, data: result })
@@ -108,7 +110,7 @@ export const deleteBaby = async (req: Request, res: Response) => {
       logger.info('Success delete baby')
       return res.status(200).send({ status: true, statusCode: 200, message: 'Delete baby successfuly' })
     } else {
-      logger.info('Baby not fount')
+      logger.info('Baby not found')
       return res.status(404).send({ status: true, statusCode: 404, message: 'Baby not found' })
     }
   } catch (error) {

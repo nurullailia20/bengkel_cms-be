@@ -36,10 +36,10 @@ export const createBabyCondition = async (req: Request, res: Response) => {
     logger.info('Add baby condition successfully')
     return res
       .status(201)
-      .send({ status: true, statusCode: 201, message: 'Baby condition added successfully', data: response })
+      .send({ status: true, statusCode: 201, message: 'Add Baby Condition Successfully', data: response })
   } catch (error) {
-    logger.error('ERR: detail baby = ', error)
-    return res.status(422).send({ status: false, statuseCode: 422, message: error })
+    logger.error('ERR: create - condition = ', error)
+    return res.status(422).send({ status: false, statusCode: 422, message: error })
   }
 }
 
@@ -54,15 +54,39 @@ export const getBabyConditions = async (req: Request, res: Response) => {
       }
     })
 
-    const result = responses.map((response) => ({
-      ...response,
-      month: getMonth(response.created_at),
-      created_at: dateFormatter(response.created_at),
-      updated_at: dateFormatter(response.updated_at)
-    }))
+    // const result = responses.map((response) => ({
+    //   ...response,
+    //   // month: getMonth(response.created_at),
+    //   created_at: dateFormatter(response.created_at),
+    //   updated_at: dateFormatter(response.updated_at)
+    // }))
 
     logger.info('Get baby conditions successfully')
-    return res.status(200).send({ status: true, statusCode: 200, data: result })
+    return res.status(200).send({ status: true, statusCode: 200, data: responses })
+  } catch (error) {
+    logger.error('Err = baby-read', error)
+    return res.status(422).send({ status: false, statuseCode: 422, message: error })
+  }
+}
+
+export const DeleteBabyCondition = async (req: Request, res: Response) => {
+  const {
+    params: { id }
+  } = req
+
+  try {
+    const response = await prisma.baby_condition.delete({
+      where: {
+        id
+      }
+    })
+    if (response) {
+      logger.info('Delete Baby Condition Successfully')
+      res.status(200).send({ status: true, statusCode: 200, message: 'Delete Baby Condition Successfully' })
+    } else {
+      logger.info('Baby Condition not Found')
+      return res.status(404).send({ status: true, statusCode: 404, message: 'Baby Condition not Found' })
+    }
   } catch (error) {
     logger.error('Err = baby-read', error)
     return res.status(422).send({ status: false, statuseCode: 422, message: error })
