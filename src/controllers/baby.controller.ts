@@ -8,7 +8,7 @@ export const createBaby = async (req: Request, res: Response) => {
   const { error, value } = createBabyValidation(req.body)
   if (error) {
     logger.error('Err = baby-create', error.details[0].message)
-    return res.status(422).send({ status: false, statuseCode: 422, message: error.details[0].message })
+    return res.status(422).send({ status: false, statusCode: 422, message: error.details[0].message })
   }
 
   try {
@@ -22,10 +22,10 @@ export const createBaby = async (req: Request, res: Response) => {
         phone_number: value.phone_number
       }
     })
-    return res.status(200).send({ status: true, statusCode: 200, message: 'Add Baby successfuly', data: { baby } })
+    return res.status(200).send({ status: true, statusCode: 200, message: 'Berhasil Menambahkan Data', data: { baby } })
   } catch (error) {
     logger.error('Err = baby-create', error)
-    return res.status(422).send({ status: false, statuseCode: 422, message: error })
+    return res.status(422).send({ status: false, statusCode: 422, message: error })
   }
 }
 
@@ -52,7 +52,7 @@ export const getBaby = async (req: Request, res: Response) => {
     return res.status(200).send({ status: true, statusCode: 200, data: result })
   } catch (error) {
     logger.error('Err = baby-get', error)
-    return res.status(422).send({ status: false, statuseCode: 422, message: error })
+    return res.status(422).send({ status: false, statusCode: 422, message: error })
   }
 }
 
@@ -64,7 +64,7 @@ export const updateBaby = async (req: Request, res: Response) => {
   const { error, value } = createBabyValidation(req.body)
   if (error) {
     logger.error('Err = baby-update', error.details[0].message)
-    return res.status(422).send({ status: false, statuseCode: 422, message: error.details[0].message })
+    return res.status(422).send({ status: false, statusCode: 422, message: error.details[0].message })
   }
 
   try {
@@ -83,14 +83,14 @@ export const updateBaby = async (req: Request, res: Response) => {
     })
     if (baby) {
       logger.info('Success update new baby')
-      return res.status(200).send({ status: true, statusCode: 200, message: 'Update Baby Successfuly' })
+      return res.status(200).send({ status: true, statusCode: 200, message: 'Berhasil Memperbarui Data' })
     } else {
       logger.info('Baby not fount')
       return res.status(404).send({ status: true, statusCode: 404, message: 'Baby not found' })
     }
   } catch (error) {
     logger.error('Err = baby-update', error)
-    return res.status(422).send({ status: false, statuseCode: 422, message: error })
+    return res.status(422).send({ status: false, statusCode: 422, message: error })
   }
 }
 
@@ -105,17 +105,22 @@ export const deleteBaby = async (req: Request, res: Response) => {
         id
       }
     })
+    await prisma.baby_condition.deleteMany({
+      where: {
+        id
+      }
+    })
 
     if (response) {
       logger.info('Success delete baby')
-      return res.status(200).send({ status: true, statusCode: 200, message: 'Delete baby successfuly' })
+      return res.status(200).send({ status: true, statusCode: 200, message: 'Berhasil Menghapus Data' })
     } else {
       logger.info('Baby not found')
       return res.status(404).send({ status: true, statusCode: 404, message: 'Baby not found' })
     }
   } catch (error) {
     logger.error('ERR: delete baby = ', error)
-    return res.status(422).send({ status: false, statuseCode: 422, message: error })
+    return res.status(422).send({ status: false, statusCode: 422, message: error })
   }
 }
 
@@ -145,6 +150,6 @@ export const getBabyDetail = async (req: Request, res: Response) => {
     return res.status(200).send({ status: true, statusCode: 200, data: result })
   } catch (error) {
     logger.error('ERR: detail-baby = ', error)
-    return res.status(422).send({ status: false, statuseCode: 422, message: error })
+    return res.status(422).send({ status: false, statusCode: 422, message: error })
   }
 }

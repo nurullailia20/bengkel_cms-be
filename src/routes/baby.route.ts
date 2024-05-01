@@ -6,6 +6,6 @@ export const BabyRouter: Router = Router()
 
 BabyRouter.get('/', getBaby)
 BabyRouter.get('/:id', getBabyDetail)
-BabyRouter.post('/', requireUser, createBaby)
+BabyRouter.post('/', createBaby)
 BabyRouter.delete('/:id', deleteBaby)
 BabyRouter.put('/:id', updateBaby)
