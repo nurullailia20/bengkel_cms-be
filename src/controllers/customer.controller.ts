@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
-import { createBabyValidation } from '../validations/customer.validation'
 import { logger } from '../utils/logger'
 import prisma from '../../lib/prisma'
 import { calculateAgeInMonths, dateFormatter } from '../utils/commonFunctions'
+import { createCustomerValidation } from '../validations/customer.validation'
 
 export const createCustomer = async (req: Request, res: Response) => {
   const { error, value } = createCustomerValidation(req.body)
@@ -21,7 +21,7 @@ export const createCustomer = async (req: Request, res: Response) => {
         phone_number: value.phone_number
       }
     })
-    return res.status(200).send({ status: true, statusCode: 200, message: 'Berhasil Menambahkan Data', data: { customer } })
+    return res.status(200).send({ status: true, statusCode: 200, message: 'Berhasil Menambahkan Data', data: customer })
   } catch (error) {
     logger.error('Err = customer-create', error)
     return res.status(422).send({ status: false, statusCode: 422, message: error })
