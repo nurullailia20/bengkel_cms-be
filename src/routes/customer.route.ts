@@ -1,6 +1,7 @@
 import { Router } from 'express'
-import { createBaby, createCustomer, deleteBaby, getBaby, getBabyDetail, updateBaby } from '../controllers/baby.controller'
+// import { createBaby, createCustomer, deleteBaby, getBaby, getBabyDetail, updateBaby } from '../controllers/customer.controller'
 import { requireUser } from '../middleware/auth'
+import { createCustomer } from '../controllers/customer.controller'
 
 export const CustomerRouter: Router = Router()
 

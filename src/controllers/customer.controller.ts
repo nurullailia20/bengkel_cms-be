@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
-import { createBabyValidation } from '../validations/customer.validation'
 import { logger } from '../utils/logger'
 import prisma from '../../lib/prisma'
 import { calculateAgeInMonths, dateFormatter } from '../utils/commonFunctions'
+import { createCustomerValidation } from '../validations/customer.validation'
 
 export const createCustomer = async (req: Request, res: Response) => {
   const { error, value } = createCustomerValidation(req.body)
