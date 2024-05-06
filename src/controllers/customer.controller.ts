@@ -21,7 +21,7 @@ export const createCustomer = async (req: Request, res: Response) => {
         phone_number: value.phone_number
       }
     })
-    return res.status(200).send({ status: true, statusCode: 200, message: 'Berhasil Menambahkan Data', data: { customer } })
+    return res.status(200).send({ status: true, statusCode: 200, message: 'Berhasil Menambahkan Data', data: customer })
   } catch (error) {
     logger.error('Err = customer-create', error)
     return res.status(422).send({ status: false, statusCode: 422, message: error })
