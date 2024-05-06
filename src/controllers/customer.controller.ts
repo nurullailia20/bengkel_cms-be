@@ -28,127 +28,93 @@ export const createCustomer = async (req: Request, res: Response) => {
   }
 }
 
-// export const getBaby = async (req: Request, res: Response) => {
-//   try {
-//     const responses = await prisma.baby.findMany({
-//       select: {
-//         id: true,
-//         name: true,
-//         gender: true,
-//         parent_name: true,
-//         phone_number: true,
-//         address: true,
-//         birthdate: true
-//       }
-//     })
-//     const result = responses.map((response) => ({
-//       ...response,
-//       birthdate: dateFormatter(response.birthdate),
-//       age: calculateAgeInMonths(response.birthdate),
-//       gender: response.gender === 'male' ? 'Laki-Laki' : 'Perempuan'
-//     }))
-//     logger.info('Success get baby data')
-//     return res.status(200).send({ status: true, statusCode: 200, data: result })
-//   } catch (error) {
-//     logger.error('Err = baby-get', error)
-//     return res.status(422).send({ status: false, statusCode: 422, message: error })
-//   }
-// }
+export const getCustomer = async (req: Request, res: Response) => {
+  try {
+    const responses = await prisma.customer.findMany()
 
-// export const updateBaby = async (req: Request, res: Response) => {
-//   const {
-//     params: { id }
-//   } = req
+    logger.info('Success get customer data')
+    return res.status(200).send({ status: true, statusCode: 200, data: responses })
+  } catch (error) {
+    logger.error('Err = customer-get', error)
+    return res.status(422).send({ status: false, statusCode: 422, message: error })
+  }
+}
 
-//   const { error, value } = createBabyValidation(req.body)
-//   if (error) {
-//     logger.error('Err = baby-update', error.details[0].message)
-//     return res.status(422).send({ status: false, statusCode: 422, message: error.details[0].message })
-//   }
+export const updateCustomer = async (req: Request, res: Response) => {
+  const {
+    params: { id }
+  } = req
 
-//   try {
-//     const baby = await prisma.baby.update({
-//       where: {
-//         id
-//       },
-//       data: {
-//         name: value.name,
-//         gender: value.gender,
-//         birthdate: value.birthdate,
-//         parent_name: value.parent_name,
-//         address: value.address,
-//         phone_number: value.phone_number
-//       }
-//     })
-//     if (baby) {
-//       logger.info('Success update new baby')
-//       return res.status(200).send({ status: true, statusCode: 200, message: 'Berhasil Memperbarui Data' })
-//     } else {
-//       logger.info('Baby not fount')
-//       return res.status(404).send({ status: true, statusCode: 404, message: 'Baby not found' })
-//     }
-//   } catch (error) {
-//     logger.error('Err = baby-update', error)
-//     return res.status(422).send({ status: false, statusCode: 422, message: error })
-//   }
-// }
+  const { error, value } = createCustomerValidation(req.body)
+  if (error) {
+    logger.error('Err = customer-update', error.details[0].message)
+    return res.status(422).send({ status: false, statusCode: 422, message: error.details[0].message })
+  }
 
-// export const deleteBaby = async (req: Request, res: Response) => {
-//   const {
-//     params: { id }
-//   } = req
+  try {
+    const customer = await prisma.customer.update({
+      where: {
+        id
+      },
+      data: {
+        name: value.name,
+        vehicle: value.vehicle,
+        police_number: value.police_number,
+        total_point: value.total_point,
+        phone_number: value.phone_number
+      }
+    })
+    if (customer) {
+      logger.info('Success update new baby')
+      return res.status(200).send({ status: true, statusCode: 200, message: 'Berhasil Memperbarui Data' })
+    } else {
+      logger.info('Baby not fount')
+      return res.status(404).send({ status: true, statusCode: 404, message: 'Baby not found' })
+    }
+  } catch (error) {
+    logger.error('Err = baby-update', error)
+    return res.status(422).send({ status: false, statusCode: 422, message: error })
+  }
+}
 
-//   try {
-//     const response = await prisma.baby.delete({
-//       where: {
-//         id
-//       }
-//     })
-//     await prisma.baby_condition.deleteMany({
-//       where: {
-//         id
-//       }
-//     })
+export const deleteCustomer = async (req: Request, res: Response) => {
+  const {
+    params: { id }
+  } = req
 
-//     if (response) {
-//       logger.info('Success delete baby')
-//       return res.status(200).send({ status: true, statusCode: 200, message: 'Berhasil Menghapus Data' })
-//     } else {
-//       logger.info('Baby not found')
-//       return res.status(404).send({ status: true, statusCode: 404, message: 'Baby not found' })
-//     }
-//   } catch (error) {
-//     logger.error('ERR: delete baby = ', error)
-//     return res.status(422).send({ status: false, statusCode: 422, message: error })
-//   }
-// }
+  try {
+    const response = await prisma.customer.delete({
+      where: {
+        id
+      }
+    })
 
-// export const getBabyDetail = async (req: Request, res: Response) => {
-//   const {
-//     params: { id }
-//   } = req
-//   try {
-//     const response = await prisma.baby.findFirst({
-//       where: { id },
-//       select: {
-//         name: true,
-//         gender: true,
-//         parent_name: true,
-//         phone_number: true,
-//         address: true,
-//         birthdate: true,
-//         baby_condition: true
-//       }
-//     })
-//     const result = {
-//       ...response,
-//       age: calculateAgeInMonths(response?.birthdate),
-//       birthdate: dateFormatter(response?.birthdate)
-//     }
-//     logger.info('Success get detail baby')
-//     return res.status(200).send({ status: true, statusCode: 200, data: result })
-//   } catch (error) {
-//     logger.error('ERR: detail-baby = ', error)
-//     return res.status(422).send({ status: false, statusCode: 422, message: error })
-//   }
-// }
+    if (response) {
+      logger.info('Success delete customer')
+      return res.status(200).send({ status: true, statusCode: 200, message: 'Berhasil Menghapus Data' })
+    } else {
+      logger.info('Baby not found')
+      return res.status(404).send({ status: true, statusCode: 404, message: 'Customer not found' })
+    }
+  } catch (error) {
+    logger.error('ERR: delete customer = ', error)
+    return res.status(422).send({ status: false, statusCode: 422, message: error })
+  }
+}
+
+export const getCustomerDetail = async (req: Request, res: Response) => {
+  const {
+    params: { id }
+  } = req
+  try {
+    const response = await prisma.customer.findFirst({
+      where: { id }
+    })
+
+    logger.info('Success get detail customer')
+    return res.status(200).send({ status: true, statusCode: 200, data: response })
+  } catch (error) {
+    logger.error('ERR: detail-customer = ', error)
+    return res.status(422).send({ status: false, statusCode: 422, message: error })
+  }
+}
