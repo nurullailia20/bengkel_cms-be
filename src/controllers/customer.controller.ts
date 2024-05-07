@@ -30,7 +30,15 @@ export const createCustomer = async (req: Request, res: Response) => {
 
 export const getCustomer = async (req: Request, res: Response) => {
   try {
-    const responses = await prisma.customer.findMany()
+     const responses = await prisma.customer.findMany({
+       select: {
+         name: true,
+         vehicle: true,
+         police_number: true,
+         total_point: true,
+         phone_number: true
+       }
+     })
 
     logger.info('Success get customer data')
     return res.status(200).send({ status: true, statusCode: 200, data: responses })
