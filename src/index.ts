@@ -13,17 +13,18 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 // cors access handler
-app.use(
-  cors({
-    origin: 'http://localhost:3000',
-    credentials: true
-  })
-)
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Methods', '*')
-  res.setHeader('Access-Control-Allow-Headers', '*')
-  next()
-})
+app.use(cors())
+// app.use(
+//   cors({
+//     origin: 'http://localhost:3000',
+//     credentials: true
+//   })
+// )
+// app.use((req, res, next) => {
+//   res.setHeader('Access-Control-Allow-Methods', '*')
+//   res.setHeader('Access-Control-Allow-Headers', '*')
+//   next()
+// })
 
 app.use(deserializeToken)
 
