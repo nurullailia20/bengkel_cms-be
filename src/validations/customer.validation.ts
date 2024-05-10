@@ -6,8 +6,7 @@ export const createCustomerValidation = (payload: CustomerType) => {
     name: Joi.string().required(),
     vehicle: Joi.string().required(),
     police_number: Joi.string().required(),
-    phone_number: Joi.string().required(),
-    total_point: Joi.number().required()
+    phone_number: Joi.string().required()
   })
   return schema.validate(payload)
 }
