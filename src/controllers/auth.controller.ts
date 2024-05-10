@@ -21,12 +21,8 @@ export const userRegistration = async (req: Request, res: Response) => {
     value.password = `${hashing(value.password)}`
     await prisma.user.create({
       data: {
-        id: value.id,
-        name: value.name,
         email: value.email,
-        password: value.password,
-        address: value.address,
-        role: value.role
+        password: value.password
       }
     })
     logger.info('User created')
@@ -68,7 +64,7 @@ export const createUserSession = async (req: Request, res: Response) => {
       return res.status(401).json({
         status: false,
         statusCode: 401,
-        message: 'Invalid Email or Password'
+        message: 'Invalid Name or Password'
       })
     }
 

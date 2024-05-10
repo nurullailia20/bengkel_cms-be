@@ -1,7 +1,7 @@
 -- CreateTable
 CREATE TABLE "user" (
     "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
 
     CONSTRAINT "user_pkey" PRIMARY KEY ("id")
@@ -14,7 +14,7 @@ CREATE TABLE "customer" (
     "vehicle" TEXT NOT NULL,
     "police_number" TEXT NOT NULL,
     "phone_number" TEXT NOT NULL,
-    "total_point" INTEGER NOT NULL,
+    "total_point" INTEGER,
 
     CONSTRAINT "customer_pkey" PRIMARY KEY ("id")
 );

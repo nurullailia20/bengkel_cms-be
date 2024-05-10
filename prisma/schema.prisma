@@ -10,7 +10,7 @@ datasource db {
 
 model user {
   id            String    @id @default(cuid())
-  name          String
+  email         String
   password      String
 }
 
@@ -21,5 +21,5 @@ model customer {
   vehicle               String
   police_number         String
   phone_number          String
-  total_point           Int
+  total_point           Int?
 }

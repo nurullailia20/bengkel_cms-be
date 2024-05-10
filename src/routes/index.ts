@@ -5,8 +5,8 @@ import { CustomerRouter } from './customer.route'
 import { BabyConditionRouter } from './condition.route'
 
 const _routes: Array<[string, Router]> = [
-  ['/health', HealthRouter],
-  // ['/auth', AuthRouter],
+  // ['/health', HealthRouter],
+  ['/auth', AuthRouter],
   ['/customer', CustomerRouter]
   // ['/condition', BabyConditionRouter]
 ]
