@@ -2,8 +2,8 @@ import { Request, Response } from 'express'
 import { createSessionValidation, createUserValidation, refreshSessionValidation } from '../validations/auth.validation'
 import { logger } from '../utils/logger'
 import { checkPassword, hashing } from '../utils/hashing'
-import prisma from '../../lib/prisma'
 import { signJWT, verifyJWT } from '../utils/jwt'
+import prisma from '../../lib/prisma'
 
 export const userRegistration = async (req: Request, res: Response) => {
   const { error, value } = createUserValidation(req.body)
@@ -22,7 +22,8 @@ export const userRegistration = async (req: Request, res: Response) => {
     await prisma.user.create({
       data: {
         email: value.email,
-        password: value.password
+        password: value.password,
+        name: value.name
       }
     })
     logger.info('User created')
@@ -64,7 +65,7 @@ export const createUserSession = async (req: Request, res: Response) => {
       return res.status(401).json({
         status: false,
         statusCode: 401,
-        message: 'Invalid Name or Password'
+        message: 'Invalid Email or Password'
       })
     }
 
@@ -76,11 +77,11 @@ export const createUserSession = async (req: Request, res: Response) => {
       .status(200)
       .send({ status: true, statusCode: 200, message: 'Login success', data: { accessToken, refreshToken } })
   } catch (error: any) {
-    logger.info('ERR: user - registration = ', error.message)
+    logger.info('ERR: user - login = ', error.message)
     return res.status(422).send({
       status: false,
       statusCode: 422,
-      message: error.details[0].message
+      message: error.message
     })
   }
 }
