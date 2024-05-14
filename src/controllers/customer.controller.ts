@@ -32,6 +32,7 @@ export const getCustomer = async (req: Request, res: Response) => {
   try {
      const responses = await prisma.customer.findMany({
        select: {
+         id: true,
          name: true,
          vehicle: true,
          police_number: true,
