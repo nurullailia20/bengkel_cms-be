@@ -20,5 +20,16 @@ CREATE TABLE "customer" (
     CONSTRAINT "customer_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "product" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "stock" INTEGER NOT NULL,
+    "price" TEXT NOT NULL,
+    "date_in" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "product_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
