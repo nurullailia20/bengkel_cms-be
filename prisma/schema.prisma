@@ -24,3 +24,11 @@ model customer {
   phone_number          String
   total_point           Int?
 }
+
+model product {
+  id        String    @id @default(cuid())
+  name      String
+  stock     Int
+  price     String
+  date_in   DateTime  @default(now())
+}
