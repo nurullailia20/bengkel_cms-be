@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { logger } from '../utils/logger'
-import prisma from '../../lib/prisma'
+import prisma from '../lib/prisma'
 import { createProductValidation } from '../validations/product.validation'
 
 export const createProduct = async (req: Request, res: Response) => {
@@ -28,15 +28,15 @@ export const createProduct = async (req: Request, res: Response) => {
 
 export const getProduct = async (req: Request, res: Response) => {
   try {
-     const responses = await prisma.product.findMany({
-       select: {
-         id: true,
-         name: true,
-         stock: true,
-         price: true,
-         date_in: true
-       }
-     })
+    const responses = await prisma.product.findMany({
+      select: {
+        id: true,
+        name: true,
+        stock: true,
+        price: true,
+        date_in: true
+      }
+    })
 
     logger.info('Success get product data')
     return res.status(200).send({ status: true, statusCode: 200, data: responses })
