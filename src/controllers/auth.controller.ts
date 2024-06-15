@@ -3,7 +3,7 @@ import { createSessionValidation, createUserValidation, refreshSessionValidation
 import { logger } from '../utils/logger'
 import { checkPassword, hashing } from '../utils/hashing'
 import { signJWT, verifyJWT } from '../utils/jwt'
-import prisma from '../../lib/prisma'
+import prisma from '../lib/prisma'
 
 export const userRegistration = async (req: Request, res: Response) => {
   const { error, value } = createUserValidation(req.body)
