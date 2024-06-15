@@ -31,7 +31,7 @@ app.use(deserializeToken)
 app.use('/api/v1/', router)
 
 app.listen(port, () => {
-  logger.info(`listening on http://localhost:${port}`)
+  logger.info(`listening on http://localhost:${port}/api/v1`)
 })
 
 export default app

@@ -14,8 +14,12 @@ import {
   getProductDetail,
   updateProduct
 } from '../controllers/product.controller'
+import { baseRoute } from './baseRoute.route'
 
 const router = Router()
+
+// base
+router.get('/', baseRoute)
 
 // auth
 router.get('auth/', getUsers)

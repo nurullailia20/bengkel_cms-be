@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.BabyConditionRouter = void 0;
+const express_1 = require("express");
+const condition_controller_1 = require("../controllers/condition.controller");
+const baby_1 = require("../middleware/baby");
+exports.BabyConditionRouter = (0, express_1.Router)();
+exports.BabyConditionRouter.get('/:id', baby_1.requireBaby, condition_controller_1.getBabyConditions);
+exports.BabyConditionRouter.post('/:id', baby_1.requireBaby, condition_controller_1.createBabyCondition);
+exports.BabyConditionRouter.delete('/:id', baby_1.requireBaby, condition_controller_1.DeleteBabyCondition);
