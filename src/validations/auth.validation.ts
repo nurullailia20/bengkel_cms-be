@@ -5,7 +5,8 @@ export const createUserValidation = (payload: UserType) => {
   const schema = Joi.object({
     email: Joi.string().required(),
     password: Joi.string().required(),
-    name: Joi.string().required()
+    name: Joi.string().required(),
+    role: Joi.string().required()
   })
   return schema.validate(payload)
 }

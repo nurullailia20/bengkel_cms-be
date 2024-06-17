@@ -14,24 +14,24 @@ app.use(bodyParser.json())
 
 // cors access handler
 app.use(cors())
-// app.use(
-//   cors({
-//     origin: 'http://localhost:3000',
-//     credentials: true
-//   })
-// )
-// app.use((req, res, next) => {
-//   res.setHeader('Access-Control-Allow-Methods', '*')
-//   res.setHeader('Access-Control-Allow-Headers', '*')
-//   next()
-// })
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    credentials: true
+  })
+)
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Methods', '*')
+  res.setHeader('Access-Control-Allow-Headers', '*')
+  next()
+})
 
 app.use(deserializeToken)
 
 app.use('/api/v1/', router)
 
 app.listen(port, () => {
-  logger.info(`listening on http://localhost:${port}/api/v1`)
+  logger.info(`listening on http://localhost:${port}/api/v1/`)
 })
 
 export default app

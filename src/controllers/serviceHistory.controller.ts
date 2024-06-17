@@ -1,52 +1,37 @@
-// import { Request, Response } from 'express'
-// import { logger } from '../utils/logger'
-// import prisma from '../lib/prisma'
-// import { createCustomerValidation } from '../validations/customer.validation'
+/* eslint-disable @typescript-eslint/naming-convention */
+/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
+import { Request, Response } from 'express'
+import { logger } from '../utils/logger'
+import prisma from '../lib/prisma'
+import { createServiceHistoryValidation } from '../validations/serviceHistory.validation'
 
-// export const createCustomer = async (req: Request, res: Response) => {
-//   const { error, value } = createCustomerValidation(req.body)
-//   if (error) {
-//     logger.error('Err = customer-create', error.details[0].message)
-//     return res.status(422).send({ status: false, statusCode: 422, message: error.details[0].message })
-//   }
+export const createServiceHistory = async (req: Request, res: Response) => {
+  const { user_id } = req.query
+  const { error, value } = createServiceHistoryValidation(req.body)
 
-//   try {
-//     const customer = await prisma.customer.create({
-//       data: {
-//         name: value.name,
-//         vehicle: value.vehicle,
-//         police_number: value.police_number,
-//         total_point: value.total_point,
-//         phone_number: value.phone_number
-//       }
-//     })
-//     return res.status(200).send({ status: true, statusCode: 200, message: 'Berhasil Menambahkan Data', data: customer })
-//   } catch (error) {
-//     logger.error('Err = customer-create', error)
-//     return res.status(422).send({ status: false, statusCode: 422, message: error })
-//   }
-// }
+  if (error) {
+    logger.error('Err = service history - create', error.details[0].message)
+    return res.status(422).send({ status: false, statusCode: 422, message: error.details[0].message })
+  }
 
-// export const getCustomer = async (req: Request, res: Response) => {
-//   try {
-//     const responses = await prisma.customer.findMany({
-//       select: {
-//         id: true,
-//         name: true,
-//         vehicle: true,
-//         police_number: true,
-//         total_point: true,
-//         phone_number: true
-//       }
-//     })
-
-//     logger.info('Success get customer data')
-//     return res.status(200).send({ status: true, statusCode: 200, data: responses })
-//   } catch (error) {
-//     logger.error('Err = customer-get', error)
-//     return res.status(422).send({ status: false, statusCode: 422, message: error })
-//   }
-// }
+  try {
+    const response = await prisma.service_history.create({
+      data: {
+        user_id: user_id as string,
+        description: value.description,
+        recomendation: value.recomendation,
+        date: value.date
+      },
+      include: {
+        user: true
+      }
+    })
+    return res.status(200).send({ status: true, statusCode: 200, message: 'Berhasil Menambahkan Data', data: response })
+  } catch (error) {
+    logger.error('Err = service history - create', error)
+    return res.status(422).send({ status: false, statusCode: 422, message: error })
+  }
+}
 
 // export const updateCustomer = async (req: Request, res: Response) => {
 //   const {
