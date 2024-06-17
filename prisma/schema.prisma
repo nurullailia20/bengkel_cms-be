@@ -8,27 +8,62 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
+enum role {
+  ADMIN
+  CLIENT
+}
+
 model user {
   id            String    @id @default(cuid())
   email         String    @unique
   password      String
   name          String
+  role          role
+  customer_items customer_item[]
+  service_histories     service_history[]
 }
 
 
-model customer {
-  id                    String          @id @default(cuid())
-  name                  String
+model customer_item {
+  id                    String              @id @default(cuid())
+  user_id               String
+  user                  user                @relation(fields: [user_id], references: [id])
   vehicle               String
   police_number         String
   phone_number          String
   total_point           Int?
 }
 
+model service_history {
+  id                    String          @id @default(cuid())
+  user_id               String
+  user                  user        @relation(fields: [user_id], references: [id])
+  date                  DateTime        @default(now())
+  description           String
+  recomendation         String
+  updated_at            DateTime @default(now())
+  created_at            DateTime @default(now())
+}
+
 model product {
-  id        String    @id @default(cuid())
-  name      String
-  stock     Int
-  price     String
-  date_in   DateTime  @default(now())
+  id                                  String    @id @default(cuid())
+  name                                String
+  stock                               Int
+  price                               String
+  description     String
+  warranty        Int
+  color           String
+  image           String?
+  date_in   DateTime                  @default(now())
+  updated_at DateTime                 @default(now())
+  created_at DateTime                 @default(now())
+}
+
+model company {
+  id             String          @id @default(cuid())
+  whatsapp       String
+  facebook       String
+  instagram      String
+  about          String
+  address        String
 }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 import { Request, Response } from 'express'
 import { createSessionValidation, createUserValidation, refreshSessionValidation } from '../validations/auth.validation'
 import { logger } from '../utils/logger'
@@ -23,7 +24,8 @@ export const userRegistration = async (req: Request, res: Response) => {
       data: {
         email: value.email,
         password: value.password,
-        name: value.name
+        name: value.name,
+        role: value.role
       }
     })
     logger.info('User created')
@@ -42,7 +44,7 @@ export const userRegistration = async (req: Request, res: Response) => {
   }
 }
 
-export const createUserSession = async (req: Request, res: Response) => {
+export const createSession = async (req: Request, res: Response) => {
   const { error, value } = createSessionValidation(req.body)
 
   if (error) {
