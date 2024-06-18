@@ -41,10 +41,10 @@ router.post('/customer-item', createCustomerItem)
 
 // product
 router.get('/product/', getProduct)
-router.post('/product/', createProduct)
-router.delete('/product/:id', deleteProduct)
-router.get('/product/:id', getProductDetail)
-router.put('/product/:id', updateProduct)
+router.post('/product/add/', createProduct)
+router.delete('/product/delete/:id', deleteProduct)
+router.get('/product/detail/:id', getProductDetail)
+router.put('/product/update/:id', updateProduct)
 
 // service_history
 router.post('/service_history', createServiceHistory)

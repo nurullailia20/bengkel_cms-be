@@ -12,3 +12,16 @@ export const dateFormatter = (date: any, format: string = 'DD MMM YYYY') => {
 }
 
 export const getMonth = (date: Date | string) => moment(date).month()
+
+export const convertToRupiah = (input: string) => {
+  const number = parseInt(input, 10)
+  if (isNaN(number)) {
+    return 'Invalid number'
+  }
+
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 0
+  }).format(number)
+}

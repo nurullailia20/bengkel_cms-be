@@ -6,7 +6,11 @@ export const createProductValidation = (payload: ProductType) => {
     name: Joi.string().required(),
     stock: Joi.number().required(),
     price: Joi.string().required(),
-    date_in: Joi.date()
+    date_in: Joi.date(),
+    description: Joi.string().required(),
+    warranty: Joi.number().required(),
+    color: Joi.string().required(),
+    image: Joi.string().required()
   })
   return schema.validate(payload)
 }

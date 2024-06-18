@@ -1,7 +1,6 @@
 import 'dotenv/config'
 
 const config = {
-  db: process.env.DB,
   jwt_public: `-----BEGIN PUBLIC KEY-----
 MIICITANBgkqhkiG9w0BAQEFAAOCAg4AMIICCQKCAgB2Bga6LBUKrYZZc73vJ3Ew
 iE6hVHFTobBxeFUjsg+QVXyC3Zw2kSXAHccIfc92qyeHH+6KQIJQnzVjXpEo7fdO
