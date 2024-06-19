@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 import express, { Application } from 'express'
 import { logger } from './utils/logger'
 import bodyParser from 'body-parser'
@@ -6,7 +7,7 @@ import deserializeToken from './middleware/deserializedToken'
 import router from './routes'
 
 const app: Application = express()
-const port: number = 8080
+const port = 4000
 
 // parse body req
 app.use(bodyParser.urlencoded({ extended: false }))
