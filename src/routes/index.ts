@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { userRegistration, createSession, getUsers, refreshSession } from '../controllers/auth.controller'
+import { userRegistration, createSession, getUsers, refreshSession, updateUser } from '../controllers/auth.controller'
 // import {
 //   createCustomer,
 //   deleteCustomer,
@@ -16,7 +16,7 @@ import {
 } from '../controllers/product.controller'
 import { baseRoute } from './baseRoute.route'
 import { createServiceHistory } from '../controllers/serviceHistory.controller'
-import { createCustomerItem } from '../controllers/customerItem.controller'
+import { createCustomerItem, deleteCustomerItem, updateCustomerItem } from '../controllers/customerItem.controller'
 
 const router = Router()
 
@@ -24,20 +24,18 @@ const router = Router()
 router.get('/', baseRoute)
 
 // auth
-router.get('/auth/', getUsers)
+router.get('/auth/customers', getUsers)
 router.post('/auth/register', userRegistration)
 router.post('/auth/login', createSession)
 router.post('/auth/refresh', refreshSession)
 
-// customer item
-router.post('/customer-item', createCustomerItem)
-
 // Customer
-// router.get('/customer/', getCustomer)
-// router.post('/customer/', createCustomer)
-// router.delete('/customer/:id', deleteCustomer)
-// router.get('/customer/:id', getCustomerDetail)
-// router.put('/customer/:id', updateCustomer)
+router.put('/customer/update/:id', updateUser)
+
+// customer item
+router.post('/customer-item/add/:id', createCustomerItem)
+router.delete('/customer-item/delete/:id', deleteCustomerItem)
+router.put('/customer-item/update/:id', updateCustomerItem)
 
 // product
 router.get('/product/', getProduct)

@@ -1,6 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 import { Request, Response } from 'express'
-import { createSessionValidation, createUserValidation, refreshSessionValidation } from '../validations/auth.validation'
+import {
+  createSessionValidation,
+  createUserValidation,
+  refreshSessionValidation,
+  updateUserValidation
+} from '../validations/auth.validation'
 import { logger } from '../utils/logger'
 import { checkPassword, hashing } from '../utils/hashing'
 import { signJWT, verifyJWT } from '../utils/jwt'
@@ -71,13 +76,15 @@ export const createSession = async (req: Request, res: Response) => {
       })
     }
 
+    const userRole = user.role
+
     const accessToken = signJWT({ ...user }, { expiresIn: '1d' })
 
     const refreshToken = signJWT({ ...user }, { expiresIn: '1y' })
 
     return res
       .status(200)
-      .send({ status: true, statusCode: 200, message: 'Login success', data: { accessToken, refreshToken } })
+      .send({ status: true, statusCode: 200, message: 'Login success', data: { accessToken, refreshToken, userRole } })
   } catch (error: any) {
     logger.info('ERR: user - login = ', error.message)
     return res.status(422).send({
@@ -132,7 +139,20 @@ export const refreshSession = async (req: Request, res: Response) => {
 
 export const getUsers = async (req: Request, res: Response) => {
   try {
-    const users = await prisma.user.findMany()
+    const users = await prisma.user.findMany({
+      where: {
+        role: 'CLIENT'
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        phone_number: true,
+        total_point: true,
+        customer_items: true
+      }
+    })
     return res.status(200).json({
       status: true,
       statusCode: 200,
@@ -145,6 +165,47 @@ export const getUsers = async (req: Request, res: Response) => {
       status: false,
       statusCode: 500,
       message: 'Internal server error'
+    })
+  }
+}
+
+export const updateUser = async (req: Request, res: Response) => {
+  const { error, value } = updateUserValidation(req.body)
+  if (error) {
+    logger.info('ERR: user registration - update = ', error.details[0].message)
+    return res.status(422).send({
+      status: false,
+      statusCode: 422,
+      message: error.details[0].message
+    })
+  }
+
+  const { id } = req.params
+
+  try {
+    // value.password = `${hashing(value.password)}`
+    await prisma.user.update({
+      where: { id },
+      data: {
+        email: value.email,
+        // password: value.password,
+        name: value.name,
+        phone_number: value.phone_number,
+        total_point: value.total_point
+      }
+    })
+    logger.info('User created')
+    return res.status(201).json({
+      status: true,
+      statusCode: 201,
+      message: 'User Update Successfully'
+    })
+  } catch (error: any) {
+    logger.info('ERR: registration update = ', error.details[0].message)
+    return res.status(422).send({
+      status: false,
+      statusCode: 422,
+      message: error.details[0].message
     })
   }
 }

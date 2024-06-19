@@ -8,6 +8,8 @@ CREATE TABLE "user" (
     "password" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "role" "role" NOT NULL,
+    "phone_number" TEXT,
+    "total_point" INTEGER,
 
     CONSTRAINT "user_pkey" PRIMARY KEY ("id")
 );
@@ -18,8 +20,6 @@ CREATE TABLE "customer_item" (
     "user_id" TEXT NOT NULL,
     "vehicle" TEXT NOT NULL,
     "police_number" TEXT NOT NULL,
-    "phone_number" TEXT NOT NULL,
-    "total_point" INTEGER,
 
     CONSTRAINT "customer_item_pkey" PRIMARY KEY ("id")
 );
@@ -68,6 +68,9 @@ CREATE TABLE "company" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "user_phone_number_key" ON "user"("phone_number");
 
 -- AddForeignKey
 ALTER TABLE "customer_item" ADD CONSTRAINT "customer_item_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

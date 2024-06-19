@@ -19,6 +19,8 @@ model user {
   password      String
   name          String
   role          role
+  phone_number          String? @unique
+  total_point           Int?
   customer_items customer_item[]
   service_histories     service_history[]
 }
@@ -30,8 +32,6 @@ model customer_item {
   user                  user                @relation(fields: [user_id], references: [id])
   vehicle               String
   police_number         String
-  phone_number          String
-  total_point           Int?
 }
 
 model service_history {
