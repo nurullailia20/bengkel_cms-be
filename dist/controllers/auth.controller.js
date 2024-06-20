@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUsers = exports.refreshSession = exports.createUserSession = exports.userRegistration = void 0;
+exports.updateUser = exports.getUsers = exports.refreshSession = exports.createSession = exports.userRegistration = void 0;
 const auth_validation_1 = require("../validations/auth.validation");
 const logger_1 = require("../utils/logger");
 const hashing_1 = require("../utils/hashing");
@@ -34,7 +34,8 @@ const userRegistration = (req, res) => __awaiter(void 0, void 0, void 0, functio
             data: {
                 email: value.email,
                 password: value.password,
-                name: value.name
+                name: value.name,
+                role: value.role
             }
         });
         logger_1.logger.info('User created');
@@ -54,7 +55,7 @@ const userRegistration = (req, res) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.userRegistration = userRegistration;
-const createUserSession = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const createSession = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { error, value } = (0, auth_validation_1.createSessionValidation)(req.body);
     if (error) {
         logger_1.logger.info('ERR: user - login = ', error.details[0].message);
@@ -78,11 +79,12 @@ const createUserSession = (req, res) => __awaiter(void 0, void 0, void 0, functi
                 message: 'Invalid Email or Password'
             });
         }
+        const userRole = user.role;
         const accessToken = (0, jwt_1.signJWT)(Object.assign({}, user), { expiresIn: '1d' });
         const refreshToken = (0, jwt_1.signJWT)(Object.assign({}, user), { expiresIn: '1y' });
         return res
             .status(200)
-            .send({ status: true, statusCode: 200, message: 'Login success', data: { accessToken, refreshToken } });
+            .send({ status: true, statusCode: 200, message: 'Login success', data: { accessToken, refreshToken, userRole } });
     }
     catch (error) {
         logger_1.logger.info('ERR: user - login = ', error.message);
@@ -93,7 +95,7 @@ const createUserSession = (req, res) => __awaiter(void 0, void 0, void 0, functi
         });
     }
 });
-exports.createUserSession = createUserSession;
+exports.createSession = createSession;
 const refreshSession = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { error, value } = (0, auth_validation_1.refreshSessionValidation)(req.body);
     if (error) {
@@ -132,7 +134,20 @@ const refreshSession = (req, res) => __awaiter(void 0, void 0, void 0, function*
 exports.refreshSession = refreshSession;
 const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const users = yield prisma_1.default.user.findMany();
+        const users = yield prisma_1.default.user.findMany({
+            where: {
+                role: 'CLIENT'
+            },
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                role: true,
+                phone_number: true,
+                total_point: true,
+                customer_items: true
+            }
+        });
         return res.status(200).json({
             status: true,
             statusCode: 200,
@@ -150,3 +165,43 @@ const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getUsers = getUsers;
+const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { error, value } = (0, auth_validation_1.updateUserValidation)(req.body);
+    if (error) {
+        logger_1.logger.info('ERR: user registration - update = ', error.details[0].message);
+        return res.status(422).send({
+            status: false,
+            statusCode: 422,
+            message: error.details[0].message
+        });
+    }
+    const { id } = req.params;
+    try {
+        // value.password = `${hashing(value.password)}`
+        yield prisma_1.default.user.update({
+            where: { id },
+            data: {
+                email: value.email,
+                // password: value.password,
+                name: value.name,
+                phone_number: value.phone_number,
+                total_point: value.total_point
+            }
+        });
+        logger_1.logger.info('User created');
+        return res.status(201).json({
+            status: true,
+            statusCode: 201,
+            message: 'User Update Successfully'
+        });
+    }
+    catch (error) {
+        logger_1.logger.info('ERR: registration update = ', error.details[0].message);
+        return res.status(422).send({
+            status: false,
+            statusCode: 422,
+            message: error.details[0].message
+        });
+    }
+});
+exports.updateUser = updateUser;

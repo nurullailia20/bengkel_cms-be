@@ -17,7 +17,9 @@ app.use(bodyParser.json())
 app.use(
   cors({
     origin: 'http://localhost:3000',
-    credentials: true
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
   })
 )
 
@@ -32,7 +34,7 @@ app.use(deserializeToken)
 app.use('/api/v1/', router)
 
 app.listen(port, () => {
-  logger.info(`listening on http://localhost:${port}/api/v1/`)
+  logger.info(`Listening on http://localhost:${port}/api/v1/`)
 })
 
 export default app

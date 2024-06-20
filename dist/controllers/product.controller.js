@@ -16,6 +16,7 @@ exports.getProductDetail = exports.deleteProduct = exports.updateProduct = expor
 const logger_1 = require("../utils/logger");
 const prisma_1 = __importDefault(require("../lib/prisma"));
 const product_validation_1 = require("../validations/product.validation");
+const commonFunctions_1 = require("../utils/commonFunctions");
 const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { error, value } = (0, product_validation_1.createProductValidation)(req.body);
     if (error) {
@@ -28,7 +29,11 @@ const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 name: value.name,
                 stock: value.stock,
                 price: value.price,
-                date_in: value.date_in
+                date_in: value.date_in,
+                description: value.description,
+                warranty: value.warranty,
+                color: value.color,
+                image: value.image
             }
         });
         return res.status(200).send({ status: true, statusCode: 200, message: 'Berhasil Menambahkan Data', data: product });
@@ -41,17 +46,22 @@ const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 exports.createProduct = createProduct;
 const getProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const responses = yield prisma_1.default.product.findMany({
+        const products = yield prisma_1.default.product.findMany({
             select: {
                 id: true,
                 name: true,
                 stock: true,
                 price: true,
-                date_in: true
+                date_in: true,
+                description: true,
+                warranty: true,
+                color: true,
+                image: true
             }
         });
+        const response = products.map((product) => (Object.assign(Object.assign({}, product), { date_in: (0, commonFunctions_1.dateFormatter)(product.date_in), price: (0, commonFunctions_1.convertToRupiah)(product.price) })));
         logger_1.logger.info('Success get product data');
-        return res.status(200).send({ status: true, statusCode: 200, data: responses });
+        return res.status(200).send({ status: true, statusCode: 200, data: response });
     }
     catch (error) {
         logger_1.logger.error('Err = product-get', error);
@@ -75,7 +85,11 @@ const updateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 name: value.name,
                 stock: value.stock,
                 price: value.price,
-                date_in: value.date_in
+                date_in: value.date_in,
+                description: value.description,
+                warranty: value.warranty,
+                color: value.color,
+                image: value.image
             }
         });
         if (product) {
