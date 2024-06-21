@@ -67,7 +67,16 @@ export const createSession = async (req: Request, res: Response) => {
         email: req.body.email
       }
     })
-    const isValid = checkPassword(value.password, user?.password)
+
+    if (!user) {
+      return res.status(401).json({
+        status: false,
+        statusCode: 401,
+        message: 'Invalid Email or Password'
+      })
+    }
+
+    const isValid = checkPassword(value.password, user.password)
     if (!isValid) {
       return res.status(401).json({
         status: false,
@@ -76,15 +85,25 @@ export const createSession = async (req: Request, res: Response) => {
       })
     }
 
+    const username = user.name
     const userRole = user.role
 
     const accessToken = signJWT({ ...user }, { expiresIn: '1d' })
-
     const refreshToken = signJWT({ ...user }, { expiresIn: '1y' })
 
-    return res
-      .status(200)
-      .send({ status: true, statusCode: 200, message: 'Login success', data: { accessToken, refreshToken, userRole } })
+    let redirectUrl = ''
+    if (userRole === 'ADMIN') {
+      redirectUrl = '/admin/product'
+    } else if (userRole === 'CLIENT') {
+      redirectUrl = '/'
+    }
+
+    return res.status(200).send({
+      status: true,
+      statusCode: 200,
+      message: 'Login success',
+      data: { accessToken, refreshToken, username, userRole, redirectUrl }
+    })
   } catch (error: any) {
     logger.info('ERR: user - login = ', error.message)
     return res.status(422).send({
@@ -172,11 +191,11 @@ export const getUsers = async (req: Request, res: Response) => {
 export const updateUser = async (req: Request, res: Response) => {
   const { error, value } = updateUserValidation(req.body)
   if (error) {
-    logger.info('ERR: user registration - update = ', error.details[0].message)
+    logger.info('ERR: user registration - update = ', error)
     return res.status(422).send({
       status: false,
       statusCode: 422,
-      message: error.details[0].message
+      message: error
     })
   }
 
@@ -201,11 +220,11 @@ export const updateUser = async (req: Request, res: Response) => {
       message: 'User Update Successfully'
     })
   } catch (error: any) {
-    logger.info('ERR: registration update = ', error.details[0].message)
+    logger.info('ERR: registration update = ', error)
     return res.status(422).send({
       status: false,
       statusCode: 422,
-      message: error.details[0].message
+      message: error
     })
   }
 }
